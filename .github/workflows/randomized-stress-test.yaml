@@ -63,5 +63,5 @@ jobs:
             key: ${{ github.sha }}
       
       - name: check diff
-        run: diff orignial_out.txt ${{ matrix.tree }}_test.out
+        run: diff original_out.txt ${{ matrix.tree }}_test.txt
         working-directory: src/tests
