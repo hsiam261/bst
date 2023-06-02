@@ -32,7 +32,7 @@ jobs:
         run: ./output_generator.out $SEED $NUM_ITERATIONS > orignial_out.txt
       
       - name: cache answers.txt
-        uses: actions/cache@V3
+        uses: actions/cache@v3
         with:
           path: ./original_out.txt
           key: original_out.txt
@@ -61,7 +61,7 @@ jobs:
         run: ${tree}_test.out $SEED $NUM_ITERATIONS > ${tree}_test.txt
       
       - name: fetch cached output
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
             path: ./original_out.txt
             key: original_out.txt
