@@ -18,24 +18,21 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-        
-      - name: go to tests directory
-        run: cd src/tests
-        working-directory: src/tests
-      
-      - name: prepare out generator that uses gnu policy based ost
-        run: python3 preprocess.py gnu_ost_randomized_stress_test.cpp > output_generator.cpp
-      
+  
       - name: compile output_generator.cpp
-        run: g++ --std=c++14 -o output_generator.out output_generator.cpp -O3
-      
+        run: |
+          python3 preprocess.py gnu_ost_randomized_stress_test.cpp > output_generator.cpp
+          g++ --std=c++14 -o output_generator.out output_generator.cpp -O3
+        working-directory: src/tests 
+        
       - name: generate-output
         run: ./output_generator.out $SEED $NUM_ITERATIONS > orignial_out.txt
-      
+        working-directory: src/tests
+        
       - name: cache answers.txt
         uses: actions/cache@v3
         with:
-          path: ./original_out.txt
+          path: ./src/tests/original_out.txt
           key: original_out.txt
           
   test-trees:
@@ -48,25 +45,23 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      
-      - name: go to tests directory
-        run: cd src/tests/
-        working-directory: src/tests
-      
-      - name: prepare tester file
-        run: python3 preprocess.py ${tree}_randomized_stress_test.cpp > ${tree}_test.cpp
-      
+        
       - name: compile tree_test.cpp
-        run: g++ --std=c++14 -o ${tree}_test.out ${tree}_test.cpp -O3
+        run: |
+          python3 preprocess.py ${tree}_randomized_stress_test.cpp > ${tree}_test.cpp
+          g++ --std=c++14 -o ${tree}_test.out ${tree}_test.cpp -O3
+        working-directory: src/tests
       
       - name: generate output
         run: ${tree}_test.out $SEED $NUM_ITERATIONS > ${tree}_test.txt
+        working-directory: src/tests
       
       - name: fetch cached output
         uses: actions/cache@v3
         with:
-            path: ./original_out.txt
+            path: ./src/tests/original_out.txt
             key: original_out.txt
       
       - name: check diff
         run: diff orignial_out.txt ${tree}_test.out
+        working-directory: src/tests
