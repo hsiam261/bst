@@ -53,7 +53,7 @@ jobs:
         working-directory: src/tests
       
       - name: generate output
-        run: timeout ${{ TIMEOUT }}s bash -c "./${{ matrix.tree }}_test.out $SEED $NUM_ITERATIONS > ${{ matrix.tree }}_test.txt"
+        run: timeout ${{ TIME_LIMIT }}s bash -c "./${{ matrix.tree }}_test.out $SEED $NUM_ITERATIONS > ${{ matrix.tree }}_test.txt"
         working-directory: src/tests
       
       - name: fetch cached output
