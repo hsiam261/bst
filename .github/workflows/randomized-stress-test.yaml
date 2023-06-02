@@ -9,7 +9,7 @@ on:
 env:
   NUM_ITERATIONS: 1000000
   SEED: 0
-  TIME_LIMIT: 3
+  TIME_LIMIT: 1
 
 jobs:
   generate-original-output:
