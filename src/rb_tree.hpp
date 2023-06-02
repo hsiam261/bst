@@ -1,6 +1,5 @@
 #include <functional>
-#include <bits/stdc++.h>
-using namespace std;
+#include <iostream>
 
 /**
  * RBTree Class
@@ -21,7 +20,7 @@ class RBTree {
         node(const T& key,node* left,node* right,node* parent) : key(key), 
         left(left), right(right), parent(parent), height(0), size(1), color(red) {}
 
-        node() : left(nullptr),right(nullptr),parent(nullptr) {}   
+        node() : left(nullptr),right(nullptr),parent(nullptr), color(black) {}   
     };
 
     Comp comp;
@@ -229,7 +228,7 @@ class RBTree {
                     
                     z = z->parent->parent;
                 } else {
-                    if(z==z->left->right) {
+                    if(z==z->parent->right) {
                         z = z->parent;
                         single_rotate_left(z);
                     }
@@ -251,7 +250,7 @@ class RBTree {
                     
                     z = z->parent->parent;
                 } else {
-                    if(z==z->right->left) {
+                    if(z==z->parent->left) {
                         z = z->parent;
                         single_rotate_right(z);
                     }
@@ -337,7 +336,7 @@ class RBTree {
          * x is doubly black
          * x is not root
          */ 
-        while(x!=root && x->color!=black) {
+        while(x!=root && x->color==black) {
             if(x==x->parent->left) { 
                 node* brother = x->parent->right;
                 if(brother->color==red) {
@@ -402,11 +401,12 @@ class RBTree {
         }
 
         fix_augmentation(fixer);
+	x->color=black;
     }
 
 
     public:
-    iterator search(const T& val) {
+    iterator find(const T& val) {
         node* x = root;
         while(x!=NILL) {
             if(comp(x->key,val)) x = x->right;
@@ -454,7 +454,7 @@ class RBTree {
         return !(root->size);
     }
     unsigned size() {
-        root->size;
+        return root->size;
     }
     
     iterator begin() {
@@ -472,7 +472,7 @@ class RBTree {
     }
 
     void print(iterator it) {
-        cout << it.it->key << " " << it.it->height << " " << it.it->size << " " << ((it.it->color==red)?"red":"black") << endl;
+	    std::cout << it.it->key << " " << it.it->height << " " << it.it->size << " " << ((it.it->color==red)?"red":"black") << std::endl;
     }
 
 
@@ -530,17 +530,3 @@ typename RBTree<T,Comp>::node RBTree<T,Comp>::NULL_NODE = {};
 template<class T,class Comp>
 typename RBTree<T,Comp>::node* RBTree<T,Comp>::NILL = &RBTree<T,Comp>::NULL_NODE;
 
-int main() {
-    RBTree<int> t;
-    t.insert(1);
-    t.insert(2);
-    t.insert(3);
-    t.insert(4);
-    t.insert(5);
-    t.insert(6);
-    t.insert(7);
-
-    for(auto it = t.begin();it!=t.end();++it) {
-        t.print(it);
-    }
-}

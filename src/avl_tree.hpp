@@ -1,5 +1,5 @@
 #include <functional>
-
+#include <iostream>
 
 /**
  * AVL Tree Class
@@ -287,7 +287,7 @@ class AVLTree {
     }
 
     public:
-    iterator search(const T& val) {
+    iterator find(const T& val) {
         node* x = root;
         while(x!=NILL) {
             if(comp(x->key,val)) x = x->right;
@@ -334,8 +334,9 @@ class AVLTree {
     bool empty() {
         return !(root->size);
     }
+
     unsigned size() {
-        root->size;
+        return root->size;
     }
     
     iterator begin() {
@@ -353,7 +354,7 @@ class AVLTree {
     }
 
     void print(iterator it) {
-        cout << it.it->key << " " << it.it->height << " " << it.it->size << endl;
+	    std::cout << it.it->key << " " << it.it->height << " " << it.it->size << std::endl;
     }
 
 
@@ -410,7 +411,3 @@ typename AVLTree<T,Comp>::node AVLTree<T,Comp>::NULL_NODE = {};
 
 template<class T,class Comp>
 typename AVLTree<T,Comp>::node* AVLTree<T,Comp>::NILL = &AVLTree<T,Comp>::NULL_NODE;
-
-int main() {
-
-}
