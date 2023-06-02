@@ -48,12 +48,12 @@ jobs:
         
       - name: compile tree_test.cpp
         run: |
-          python3 preprocess.py ${tree}_randomized_stress_test.cpp > ${tree}_test.cpp
-          g++ --std=c++14 -o ${tree}_test.out ${tree}_test.cpp -O3
+          python3 preprocess.py ${{ matrix.tree }}_randomized_stress_test.cpp > ${{ matrix.tree }}_test.cpp
+          g++ --std=c++14 -o ${{ matrix.tree }}_test.out ${{ matrix.tree }}_test.cpp -O3
         working-directory: src/tests
       
       - name: generate output
-        run: ${tree}_test.out $SEED $NUM_ITERATIONS > ${tree}_test.txt
+        run: ${{ matrix.tree }}_test.out $SEED $NUM_ITERATIONS > ${{ matrix.tree }}_test.txt
         working-directory: src/tests
       
       - name: fetch cached output
@@ -63,5 +63,5 @@ jobs:
             key: original_out.txt
       
       - name: check diff
-        run: diff orignial_out.txt ${tree}_test.out
+        run: diff orignial_out.txt ${{ matrix.tree }}_test.out
         working-directory: src/tests
