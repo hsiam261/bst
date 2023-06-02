@@ -26,7 +26,7 @@ jobs:
         working-directory: src/tests 
         
       - name: generate-output
-        run: ./output_generator.out $SEED $NUM_ITERATIONS > original_out.txt
+        run: ./output_generator.out 1 $NUM_ITERATIONS > original_out.txt
         working-directory: src/tests
         
       - name: cache answers.txt
