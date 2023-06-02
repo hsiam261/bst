@@ -20,19 +20,16 @@ int main(int argc, char* argv[]) {
 
 	for (int i = 0; i < num_iterations; ++i) {
 		int operation = op_dist(gen);
-		cout << "OP:" << operation << endl;
 
 		switch (operation) {
 			case 1: {
 					// Insert a random number into the order statistic tree
 					int num = num_dist(gen);
-					cout << num << endl;
 					bst.insert(num);
 					break;
 				} case 2: {
 					// Delete a random number from the order statistic tree
 					int num = num_dist(gen);
-					cout << num << endl;
 					auto it = bst.find(num);
 					if(it != bst.end() &&  bst.size()>0) bst.erase(it);
 					break;
