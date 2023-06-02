@@ -33,7 +33,7 @@ jobs:
         uses: actions/cache/save@v3
         with:
           path: ./src/tests/original_out.txt
-          key: original_out.txt
+          key: ${{ github.sha }}
           
   test-trees:
     needs: [generate-original-output]
@@ -60,7 +60,7 @@ jobs:
         uses: actions/cache/restore@v3
         with:
             path: ./src/tests/original_out.txt
-            key: original_out.txt
+            key: ${{ github.sha }}
       
       - name: check diff
         run: diff orignial_out.txt ${{ matrix.tree }}_test.out
