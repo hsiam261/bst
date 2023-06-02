@@ -21,6 +21,7 @@ jobs:
         
       - name: go to tests directory
         run: cd src/tests
+        working-directory: src/tests
       
       - name: prepare out generator that uses gnu policy based ost
         run: python3 preprocess.py gnu_ost_randomized_stress_test.cpp > output_generator.cpp
@@ -50,6 +51,7 @@ jobs:
       
       - name: go to tests directory
         run: cd src/tests/
+        working-directory: src/tests
       
       - name: prepare tester file
         run: python3 preprocess.py ${tree}_randomized_stress_test.cpp > ${tree}_test.cpp
