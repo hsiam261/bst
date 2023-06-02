@@ -1,0 +1,70 @@
+name: randomized-stress-test
+on: 
+  push:
+    branches:
+      - master
+  pull_request:
+  workflow_dispatch:
+
+env:
+  NUM_ITERATIONS: 1000000
+  SEED: 0
+  TIME_LIMIT: 3
+
+jobs:
+  generate-original-output:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
+      - name: go to tests directory
+        run: cd src/tests
+      
+      - name: prepare out generator that uses gnu policy based ost
+        run: python3 preprocess.py gnu_ost_randomized_stress_test.cpp > output_generator.cpp
+      
+      - name: compile output_generator.cpp
+        run: g++ --std=c++14 -o output_generator.out output_generator.cpp -O3
+      
+      - name: generate-output
+        run: ./output_generator.out $SEED $NUM_ITERATIONS > orignial_out.txt
+      
+      - name: cache answers.txt
+        uses: actions/cache@V3
+        with:
+          path: ./original_out.txt
+          key: original_out.txt
+          
+  test-trees:
+    needs: [generate-original-output]
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        tree: ['avl_tree', 'rb_tree', 'splay_tree']
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: go to tests directory
+        run: cd src/tests/
+      
+      - name: prepare tester file
+        run: python3 preprocess.py ${tree}_randomized_stress_test.cpp > ${tree}_test.cpp
+      
+      - name: compile tree_test.cpp
+        run: g++ --std=c++14 -o ${tree}_test.out ${tree}_test.cpp -O3
+      
+      - name: generate output
+        run: ${tree}_test.out $SEED $NUM_ITERATIONS > ${tree}_test.txt
+      
+      - name: fetch cached output
+        uses: actions/cache@v2
+        with:
+            path: ./original_out.txt
+            key: original_out.txt
+      
+      - name: check diff
+        run: diff orignial_out.txt ${tree}_test.out
