@@ -30,7 +30,7 @@ jobs:
         working-directory: src/tests
         
       - name: cache answers.txt
-        uses: actions/cache@v3
+        uses: actions/cache/save@v3
         with:
           path: ./src/tests/original_out.txt
           key: original_out.txt
@@ -57,7 +57,7 @@ jobs:
         working-directory: src/tests
       
       - name: fetch cached output
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v3
         with:
             path: ./src/tests/original_out.txt
             key: original_out.txt
